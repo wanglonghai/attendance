@@ -1,0 +1,12 @@
+attendance:
+  userName: 13559489067
+  passWord: a3672d1a3ee5ffc11a1ead9d4953acc1
+  openId: odvHvjjoC-BhhCsBqK4WxgwfPTVY
+  templateId: TKvg5RroCqnF8l5mZ-qlMEO0LVA9g3Oka1a5FATWywg
+  serviceUrl: http://nsysapi.lsxjy.com.cn
+wechat:
+  serviceUrl: https://wx.lsxjy.com.cn
+  flag: xjwflag
+  weAppFlag: XjwUniApp
+  appid: micro_lsxjy
+  secret: micro_lsxjy

@@ -1,0 +1,12 @@
+attendance:
+  userName: 13559489067
+  passWord: C4CA4238A0B923820DCC509A6F75849B
+  openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4
+  templateId: TKvg5RroCqnF8l5mZ-qlMEO0LVA9g3Oka1a5FATWywg
+  serviceUrl: http://localhost:8086
+wechat:
+  serviceUrl: https://weixin.0be.cn
+  flag: jxw
+  weAppFlag: xjwWeAppTest
+  appid: micro_lsxjy
+  secret: micro_lsxjy
