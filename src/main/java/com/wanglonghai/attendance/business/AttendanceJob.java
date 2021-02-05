@@ -22,8 +22,8 @@ public class AttendanceJob {
     @Autowired
     AttendanceCheckService attendanceCheckService;
     //每天  8，12，20 点26分11秒
-    @Scheduled(cron = "1 2 8,12,20 * * ?")
-    //@Scheduled(cron = "0/10 * * * * ?")
+    //@Scheduled(cron = "1 2 8,12,20 * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void doAttendance(){
         log.error("*****************Scheduled start*****************");
         String token=attendanceCheckService.login();

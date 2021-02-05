@@ -72,7 +72,9 @@ public class WeiXinServiceImpl implements WeiXinService {
             log.info((String) responseData.get("data"));
             return true;
         } else {
+            log.error((String) responseData.get("message"));
             log.error("发送离线消息失败,请联系管理员");
+            log.error("send message fail,please contact adminstrator");
             return false;
         }
     }

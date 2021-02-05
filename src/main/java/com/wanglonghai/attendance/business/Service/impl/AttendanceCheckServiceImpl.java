@@ -2,11 +2,13 @@ package com.wanglonghai.attendance.business.Service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wanglonghai.attendance.business.Service.AttendanceCheckService;
+import com.wanglonghai.attendance.business.Service.WeiXinService;
 import com.wanglonghai.attendance.common.html.HttpMethod;
 import com.wanglonghai.attendance.common.html.HttpParamers;
 import com.wanglonghai.attendance.common.html.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     public String passWord;
     @Value("${attendance.serviceUrl}")
     public String serviceUrl;
+    @Autowired
+    WeiXinService weiXinService;
     @Override
     public Boolean dk(String token) {
         HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
@@ -39,6 +43,7 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
             //JSONObject jsonObject=(JSONObject)result.get("data");
             log.info("*****************attendance success*****************");
+            weiXinService.sendMessageWX("ceshi");
             return true;
         }else if(result.get("code")!=null&&"-30000".equalsIgnoreCase(result.get("code").toString())){
             log.warn(result.get("message").toString());
