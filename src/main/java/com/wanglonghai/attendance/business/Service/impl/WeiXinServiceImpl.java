@@ -54,15 +54,15 @@ public class WeiXinServiceImpl implements WeiXinService {
             "    }" +
             "}";
     private String  getUrl(){
-        if(RequestContextHolder.getRequestAttributes()!=null){
-            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            HttpServletRequest request = requestAttributes.getRequest();
-            if(request!=null){
-                String url = "http://" + request.getServerName() + ":" + request.getServerPort()+"/wanglonghai/doAttendance?timeTip=morning";
-                return url;
-            }
-        }
-        return ymlConfig.getMessageUrl();
+//        if(RequestContextHolder.getRequestAttributes()!=null){
+//            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//            HttpServletRequest request = requestAttributes.getRequest();
+//            if(request!=null){
+//                String url = "http://" + request.getServerName() + ":" + request.getServerPort()+"/wanglonghai/doAttendance?timeTip=morning";
+//                return url;
+//            }
+//        }
+        return "";
     }
     @Override
     public boolean sendMessageWX(String message) {
