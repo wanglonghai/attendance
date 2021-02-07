@@ -1,6 +1,7 @@
 package com.wanglonghai.attendance.business.Job;
 
 import com.wanglonghai.attendance.business.Service.AttendanceCheckService;
+import com.wanglonghai.attendance.business.Service.WeiXinService;
 import com.wanglonghai.attendance.entity.TimeEnum;
 import com.wanglonghai.attendance.entity.dto.ToolRandom;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ public class AttendanceJob {
     @Autowired
     AttendanceCheckService attendanceCheckService;
     @Autowired
+    WeiXinService weiXinService;
+    @Autowired
     ToolRandom toolRandom;
     /**
      *
@@ -41,6 +44,10 @@ public class AttendanceJob {
     @Scheduled(cron = "${attendance.scheduled.afternoon}")
     public void doAttendanceAfterNoon(){
         doAttendanceRange(TimeEnum.Afternoon);
+    }
+    @Scheduled(cron = "1 1 7,8,11,18,19 * * ?")
+    public void testAlive(){
+        weiXinService.sendMessageWX("I am alive!");
     }
     private void doAttendanceRange(TimeEnum tip){
         String dateStr=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -63,7 +70,7 @@ public class AttendanceJob {
                 log.info("~~~~~~~~~~~~时间未命中，不执行~~~~~~~~~~~~");
             }
         }else{
-            log.info(dateStr+" "+tip.getCode()+"~~~~~~~~~~~~has done~~~~~~~~~~~~");
+            log.info(dateStr+"-"+tip.getCode()+"~~~~~~~~~~~~is executed~~~~~~~~~~~~");
         }
     }
     private void doAttendance(String tip,String doTime){

@@ -1,6 +1,7 @@
 package com.wanglonghai.attendance.business.controller;
 
 import com.wanglonghai.attendance.business.Service.AttendanceCheckService;
+import com.wanglonghai.attendance.business.Service.WeiXinService;
 import com.wanglonghai.attendance.entity.TimeEnum;
 import com.wanglonghai.attendance.entity.dto.ToolRandom;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,14 @@ public class AttendanceController {
     @Autowired
     ToolRandom toolRandom;
     @Autowired
+    WeiXinService weiXinService;
+    @Autowired
     AttendanceCheckService attendanceCheckService;
+    @GetMapping(value ="/testAlive")
+    public String testAlive(){
+        weiXinService.sendMessageWX("I am alive!");
+        return "I am alive!";
+    }
     @GetMapping(value ="/doAttendance")
     public String doAttendance(String timeTip){
         TimeEnum timeEnum=TimeEnum.valueOfStr(timeTip);
