@@ -10,7 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -50,6 +53,17 @@ public class WeiXinServiceImpl implements WeiXinService {
             "        }" +
             "    }" +
             "}";
+    private String  getUrl(){
+        if(RequestContextHolder.getRequestAttributes()!=null){
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletRequest request = requestAttributes.getRequest();
+            if(request!=null){
+                String url = "http://" + request.getServerName() + ":" + request.getServerPort()+"/wanglonghai/doAttendance?timeTip=morning";
+                return url;
+            }
+        }
+        return ymlConfig.getMessageUrl();
+    }
     @Override
     public boolean sendMessageWX(String message) {
         if(StringUtils.isBlank(ymlConfig.getOpenId())){
@@ -57,7 +71,7 @@ public class WeiXinServiceImpl implements WeiXinService {
             return false;
         }
         HttpParamers httpParamers = new HttpParamers(HttpMethod.POST);
-        String info=String.format(template,ymlConfig.getOpenId(),ymlConfig.getTemplateId(),"www.baidu.com","1",
+        String info=String.format(template,ymlConfig.getOpenId(),ymlConfig.getTemplateId(),getUrl(),"1",
                 "2","3",message,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         httpParamers.addParam("temaplateMessageJSON",info);
         String httpUrl = ymlConfig.getWeChatServiceUrl() + "/wx/message/" + ymlConfig.getWeChatFlag() + "/sendTemplate2";
@@ -68,8 +82,8 @@ public class WeiXinServiceImpl implements WeiXinService {
             return false;
         }
         log.debug(JSON.toJSONString(responseData));
-        if (responseData.containsKey("data") && responseData.get("data") != null) {
-            log.info((String) responseData.get("data"));
+        if (responseData.get("code")!=null && "1".equalsIgnoreCase(responseData.get("code").toString())) {
+            log.info((String) responseData.get("message"));
             return true;
         } else {
             log.error((String) responseData.get("message"));

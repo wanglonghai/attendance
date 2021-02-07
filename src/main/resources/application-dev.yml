@@ -2,6 +2,14 @@ attendance:
   userName: 13559489067
   passWord: C4CA4238A0B923820DCC509A6F75849B
   serviceUrl: http://localhost:8086
+  scheduled:
+    morning: ${attendance.scheduled.seconds} ${attendance.scheduled.morningMinute} 11 * * ? #八点10分到29分，指定秒
+    noon: ${attendance.scheduled.seconds} ${attendance.scheduled.noonMinute} 12 * * ?
+    afternoon: ${attendance.scheduled.seconds} ${attendance.scheduled.afternoonMinute} 20 * * ?
+    seconds: 1,3,7,16,19,20,28,33,41,49,50,58
+    morningMinute: 48-50
+    noonMinute: 1-5
+    afternoonMinute: 1-59
 wechat:
   openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4
   templateId: 3TfikE2jG-n1qy3dVVAkuVusFaT-Dnt_PrFTO1ZDGyM
@@ -10,3 +18,4 @@ wechat:
   weAppFlag: xjwWeAppTest
   appid: micro_lsxjy
   secret: micro_lsxjy
+  messageUrl: http//:121.41.13.216:${server.port}/wanglonghai/doAttendance?timeTime=morning

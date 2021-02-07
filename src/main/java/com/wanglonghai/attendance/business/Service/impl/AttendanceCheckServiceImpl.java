@@ -7,11 +7,14 @@ import com.wanglonghai.attendance.common.html.HttpMethod;
 import com.wanglonghai.attendance.common.html.HttpParamers;
 import com.wanglonghai.attendance.common.html.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -43,10 +46,14 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
             //JSONObject jsonObject=(JSONObject)result.get("data");
             log.info("*****************attendance success*****************");
-            weiXinService.sendMessageWX("ceshi");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+            date.setTime(Long.parseLong(result.get("data").toString()));//java里面应该是按毫秒
+            weiXinService.sendMessageWX("attendance success!"+ sdf.format(date));
             return true;
         }else if(result.get("code")!=null&&"-30000".equalsIgnoreCase(result.get("code").toString())){
             log.warn(result.get("message").toString());
+            weiXinService.sendMessageWX("attendance fail!"+ result.get("message").toString());
             return true;
         }else{
             errorInfo(result);
@@ -68,6 +75,7 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         }else{
             errorInfo(result);
             log.info("*****************qrCode fail*****************");
+            weiXinService.sendMessageWX("qrCode fail!"+ result.get("message").toString());
             return false;
         }
     }
@@ -101,6 +109,7 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     private void errorInfo(Map<String, Object> result) {
         String code=result.get("code")==null?"":result.get("code").toString();
         String message=result.get("message")==null?"":result.get("message").toString();
+        weiXinService.sendMessageWX("fail!"+ message);
         log.error("###code:"+code);
         log.error("###message:"+message);
     }

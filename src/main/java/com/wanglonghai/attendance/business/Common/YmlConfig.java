@@ -28,7 +28,10 @@ public class YmlConfig {
     @Value("${wechat.openId}")
     private String openId;
     //公众号模板id
-    @Value("${wechat.templateId]")
+    @Value("${wechat.templateId}")
     private String templateId;
+    //离线消息打开地址
+    @Value("${wechat.messageUrl}")
+    private String messageUrl;
 
 }
