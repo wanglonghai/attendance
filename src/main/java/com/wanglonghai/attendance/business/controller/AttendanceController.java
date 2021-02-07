@@ -53,7 +53,7 @@ public class AttendanceController {
             }
             log.info(resultStr);
         }else{
-            resultStr=String.format("*****************已经打开了*****************",timeEnum.getCode());
+            resultStr=String.format("*****************已经打卡了*****************",timeEnum.getCode());
             log.warn(resultStr);
         }
         return resultStr;
