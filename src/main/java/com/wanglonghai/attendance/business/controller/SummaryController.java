@@ -55,6 +55,6 @@ public class SummaryController {
     }
     @GetMapping(value = "/toSaveSummary")
     public String toSavePage(){
-        return "/WriteSummary";
+        return "WriteSummary";
     }
 }

@@ -51,7 +51,7 @@ public class SummaryJob {
             attendanceSummaryService.writeSummary(attendanceWorkSummary);
         }
     }
-    @Scheduled(cron = "1 54 11 * * ?")
+    @Scheduled(cron = "1 1 22 * * ?")
     public void doSummaryRemind(){
         Date d=new Date();
         UserInfo userInfo=new UserInfo();
@@ -62,7 +62,7 @@ public class SummaryJob {
             weiXinService.sendMessageWX("summary scheduled error,because login fail");
             return;
         }
-        if(attendanceSummaryService.hasWriteSummary(d,userInfo.getAccountId(),token)){
+        if(!attendanceSummaryService.hasWriteSummary(d,userInfo.getAccountId(),token)){
             weiXinService.sendMessageWX("you do not write summary!click to write..","summary/toSaveSummary");
         }
     }
