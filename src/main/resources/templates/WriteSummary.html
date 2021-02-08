@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>write summary</title>
+</head>
+<body>
+    <p th:text="'今日总结'">今日总结</p>
+    <textarea rows="3" cols="20" id="summaryToday"></textarea>
+    <br/>
+    <p th:text="'明日计划'">明日计划</p>
+    <textarea rows="3" cols="20" id="planTomorrow"></textarea>
+    <br/>
+    <p th:text="'自评分'">自评分</p>
+    <label><input name="selfScore" type="radio" value="1" />1 </label>
+    <label><input name="selfScore" type="radio" value="2" />2 </label>
+    <label><input name="selfScore" type="radio" value="3" />3 </label>
+    <label><input name="selfScore" type="radio" value="4" />4 </label>
+    <label><input name="selfScore" type="radio" value="5" checked/>5 </label>
+    <br/>
+    <br/>
+    <input type="button" onclick="saveSummary()" value="summit"/>
+</body>
+<script type="text/javascript">
+    var xmlhttp;
+    function saveSummary()
+    {
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.open("POST","/summary/saveSummary",false);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        var  planTomorrow=document.getElementById("planTomorrow").value;
+        var  summaryToday=document.getElementById("summaryToday").value;
+        if(!summaryToday){
+            alert("今日总结不能为空");
+            return;
+        }
+        var radios = document.getElementsByName("selfScore");
+        var value =5;
+        for(var i=0;i<radios.length;i++){
+            if(radios[i].checked == true){
+                value = radios[i].value;
+            }
+        }
+        alert(value);
+        xmlhttp.send("planTomorrow="+planTomorrow+"&summaryToday="+summaryToday+"&selfScore="+value);
+        console.log(xmlhttp.responseText);
+        alert(xmlhttp.responseText);
+    }
+</script>
+</html>

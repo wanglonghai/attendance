@@ -54,25 +54,28 @@ public class WeiXinServiceImpl implements WeiXinService {
             "    }" +
             "}";
     private String  getUrl(){
-//        if(RequestContextHolder.getRequestAttributes()!=null){
-//            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//            HttpServletRequest request = requestAttributes.getRequest();
-//            if(request!=null){
-//                String url = "http://" + request.getServerName() + ":" + request.getServerPort()+"/wanglonghai/doAttendance?timeTip=morning";
-//                return url;
-//            }
-//        }
-        return "";
+        if(RequestContextHolder.getRequestAttributes()!=null){
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletRequest request = requestAttributes.getRequest();
+            if(request!=null){
+                String url = "http://" + request.getServerName() + ":" + request.getServerPort()+"/";
+                return url;
+            }
+        }
+        return ymlConfig.getMessageUrl();
     }
     @Override
     public boolean sendMessageWX(String message) {
+        String info=String.format(template,ymlConfig.getOpenId(),ymlConfig.getTemplateId(),"","1",
+                "2","3",message,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        return send(info);
+    }
+    private boolean send(String info){
         if(StringUtils.isBlank(ymlConfig.getOpenId())){
             log.error("openId not config,send message cancel***********");
             return false;
         }
         HttpParamers httpParamers = new HttpParamers(HttpMethod.POST);
-        String info=String.format(template,ymlConfig.getOpenId(),ymlConfig.getTemplateId(),getUrl(),"1",
-                "2","3",message,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         httpParamers.addParam("temaplateMessageJSON",info);
         String httpUrl = ymlConfig.getWeChatServiceUrl() + "/wx/message/" + ymlConfig.getWeChatFlag() + "/sendTemplate2";
         Map<String, Object> responseData = HttpUtils.doWeChatRequest(httpUrl, httpParamers,
@@ -91,5 +94,12 @@ public class WeiXinServiceImpl implements WeiXinService {
             log.error("send message fail,please contact adminstrator");
             return false;
         }
+    }
+
+    @Override
+    public boolean sendMessageWX(String message, String toUrl) {
+        String info=String.format(template,ymlConfig.getOpenId(),ymlConfig.getTemplateId(),getUrl()+toUrl,"0",
+                "0",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),message,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        return send(info);
     }
 }

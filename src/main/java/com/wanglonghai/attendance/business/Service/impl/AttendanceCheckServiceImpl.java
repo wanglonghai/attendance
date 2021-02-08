@@ -6,6 +6,7 @@ import com.wanglonghai.attendance.business.Service.WeiXinService;
 import com.wanglonghai.attendance.common.html.HttpMethod;
 import com.wanglonghai.attendance.common.html.HttpParamers;
 import com.wanglonghai.attendance.common.html.HttpUtils;
+import com.wanglonghai.attendance.entity.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -81,7 +82,7 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     }
 
     @Override
-    public String login(){
+    public String login(UserInfo userInfo){
         if(StringUtils.isBlank(userName)||StringUtils.isBlank(passWord)||StringUtils.isBlank(serviceUrl)){
             log.error("!!!!!!!!!!!!!!!!!!!!config error!!!!!!!!!!!!!!!!!!!!");
         }
@@ -94,6 +95,10 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/loginManager/pcLogin", httpParamers);
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
             JSONObject jsonObject=(JSONObject)result.get("data");
+            if(userInfo!=null){
+                userInfo.setAccountId(Long.valueOf(jsonObject.get("accountId").toString()));
+                userInfo.setName(jsonObject.get("userName").toString());
+            }
             //log.info(jsonObject.get("userName").toString()+"登录成功");
             log.info(jsonObject.get("userName").toString()+" login success...");
             jsonObject=(JSONObject)jsonObject.get("token");

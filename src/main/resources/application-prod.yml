@@ -2,6 +2,8 @@ attendance:
   userName: 13559489067
   passWord: a3672d1a3ee5ffc11a1ead9d4953acc1
   serviceUrl: http://nsysapi.lsxjy.com.cn
+  summary:
+    scheduled: 1 13 23 * * ?
   scheduled:
     morning: ${attendance.scheduled.seconds} ${attendance.scheduled.morningMinute} 8 * * ? #八点10分到29分，指定秒
     noon: ${attendance.scheduled.seconds} ${attendance.scheduled.noonMinute} 12 * * ?
@@ -18,4 +20,4 @@ wechat:
   weAppFlag: XjwUniApp
   appid: micro_lsxjy
   secret: micro_lsxjy
-  messageUrl: http//:121.41.13.216:${server.port}/wanglonghai/doAttendance?timeTime=morning
+  messageUrl: 121.41.13.216:${server.port}/

@@ -47,7 +47,7 @@ public class AttendanceJob {
     }
     @Scheduled(cron = "1 1 7,8,11,18,19 * * ?")
     public void testAlive(){
-        weiXinService.sendMessageWX("I am alive!");
+        weiXinService.sendMessageWX("I am alive from scheduled!");
     }
     private void doAttendanceRange(TimeEnum tip){
         String dateStr=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -75,7 +75,7 @@ public class AttendanceJob {
     }
     private void doAttendance(String tip,String doTime){
         log.info(String.format("*****************%s,Scheduled start,attendanceTime: %s*****************",tip,doTime));
-        String token=attendanceCheckService.login();
+        String token=attendanceCheckService.login(null);
         if(StringUtils.isNotBlank(token)){
             Boolean result=attendanceCheckService.getQrCode(token)
                     &&attendanceCheckService.dk(token);

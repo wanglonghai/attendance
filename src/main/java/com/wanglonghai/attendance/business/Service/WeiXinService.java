@@ -9,5 +9,6 @@ package com.wanglonghai.attendance.business.Service;
  */
 public interface WeiXinService {
     boolean sendMessageWX(String message);
+    boolean sendMessageWX(String message,String toUrl);
 
 }

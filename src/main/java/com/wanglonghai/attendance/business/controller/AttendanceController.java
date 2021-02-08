@@ -32,8 +32,8 @@ public class AttendanceController {
     AttendanceCheckService attendanceCheckService;
     @GetMapping(value ="/testAlive")
     public String testAlive(){
-        weiXinService.sendMessageWX("I am alive!");
-        return "I am alive!";
+        weiXinService.sendMessageWX("I am alive from controller!");
+        return "I am alive from controller!";
     }
     @GetMapping(value ="/doAttendance")
     public String doAttendance(String timeTip){
@@ -42,7 +42,7 @@ public class AttendanceController {
         String resultStr="未知";
         if(!toolRandom.judgeDate(timeEnum,dateStr)){
             log.info(String.format("*****************manual attendance start,attendanceTime: %s %s*****************",dateStr,timeEnum.getCode()));
-            String token=attendanceCheckService.login();
+            String token=attendanceCheckService.login(null);
             if(StringUtils.isNotBlank(token)){
                 Boolean result=attendanceCheckService.getQrCode(token)
                         &&attendanceCheckService.dk(token);
