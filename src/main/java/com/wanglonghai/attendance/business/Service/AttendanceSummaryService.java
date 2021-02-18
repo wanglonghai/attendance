@@ -1,6 +1,7 @@
 package com.wanglonghai.attendance.business.Service;
 
 import com.wanglonghai.attendance.entity.AttendanceWorkSummary;
+import com.wanglonghai.attendance.entity.UserInfo;
 
 import java.util.Date;
 
@@ -17,8 +18,8 @@ public interface AttendanceSummaryService {
     /**
      * 判断是否写日志
      * @param date 时间格式 yyyy-MM-dd 00:00:00
-     * @param summaryPersonId 人员
+     * @param userInfo 人员xinxi
      * @return
      */
-    Boolean hasWriteSummary(Date date, Long summaryPersonId,String token);
+    Boolean hasWriteSummary(Date date, UserInfo userInfo);
 }

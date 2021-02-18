@@ -1,9 +1,11 @@
 package com.wanglonghai.attendance.entity.dto;
 
 import com.wanglonghai.attendance.entity.TimeEnum;
+import com.wanglonghai.attendance.entity.UserInfo;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

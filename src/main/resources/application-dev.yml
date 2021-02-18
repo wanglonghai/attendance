@@ -1,6 +1,8 @@
+users:
+  list:
+    - {name: 13559489067,pwd: C4CA4238A0B923820DCC509A6F75849B,openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4}
+    - {name: xxx,pwd: xxx,openId: }
 attendance:
-  userName: 13559489067
-  passWord: C4CA4238A0B923820DCC509A6F75849B
   serviceUrl: http://localhost:8086
   summary:
     scheduled: 1 52 10 * * ?
@@ -13,7 +15,6 @@ attendance:
     noonMinute: 1-5
     afternoonMinute: 1-59
 wechat:
-  openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4
   templateId: 3TfikE2jG-n1qy3dVVAkuVusFaT-Dnt_PrFTO1ZDGyM
   serviceUrl: https://weixin.0be.cn
   flag: jxw

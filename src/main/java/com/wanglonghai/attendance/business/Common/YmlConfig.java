@@ -23,10 +23,6 @@ public class YmlConfig {
     //调用微信服务授权secret
     @Value("${wechat.secret}")
     private String weChatSecret;
-
-    //个人openid
-    @Value("${wechat.openId}")
-    private String openId;
     //公众号模板id
     @Value("${wechat.templateId}")
     private String templateId;

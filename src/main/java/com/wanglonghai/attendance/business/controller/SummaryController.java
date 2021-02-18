@@ -6,6 +6,7 @@ import com.wanglonghai.attendance.business.Service.WeiXinService;
 import com.wanglonghai.attendance.entity.AttendanceWorkSummary;
 import com.wanglonghai.attendance.entity.TimeEnum;
 import com.wanglonghai.attendance.entity.dto.ToolRandom;
+import com.wanglonghai.attendance.entity.dto.UserList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class SummaryController {
     AttendanceCheckService attendanceCheckService;
     @Autowired
     AttendanceSummaryService attendanceSummaryService;
+    @Autowired
+    UserList userList;
     @PostMapping(value ="/saveSummary")
     @ResponseBody
     public String saveSummary(AttendanceWorkSummary attendanceWorkSummary){
@@ -45,7 +48,7 @@ public class SummaryController {
             attendanceWorkSummary.setSummaryToday("1.修复系统问题2.优化调整一些代码模块3.部分完成任务");
         }
         attendanceWorkSummary.setSelfScore(5);
-        String token=attendanceCheckService.login(null);
+        String token=attendanceCheckService.login(userList.getList().get(0));
         if(StringUtils.isBlank(token)){
             return "summary fail,login fail!";
         }

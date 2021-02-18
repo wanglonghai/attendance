@@ -9,6 +9,8 @@ import com.wanglonghai.attendance.common.html.HttpMethod;
 import com.wanglonghai.attendance.common.html.HttpParamers;
 import com.wanglonghai.attendance.common.html.HttpUtils;
 import com.wanglonghai.attendance.entity.AttendanceWorkSummary;
+import com.wanglonghai.attendance.entity.UserInfo;
+import com.wanglonghai.attendance.entity.dto.UserList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,30 +55,31 @@ public class AttendanceSummaryServiceImpl implements AttendanceSummaryService {
                 message=(String.format("*****************at %s writeSummary success,summaryId=%s,result=true*****************",summaryDate,summaryIdObj));
                 attendanceWorkSummary.setMessage(message);
                 log.info(message);
-                weiXinService.sendMessageWX(message);
+                weiXinService.sendMessageWX(message,attendanceWorkSummary.getOpenId());
                 return true;
             }else{
                 message=(String.format("*****************at %s writeSummary fail*****************",summaryDate));
                 log.info(message);
                 attendanceWorkSummary.setMessage(message);
-                weiXinService.sendMessageWX(message);
+                weiXinService.sendMessageWX(message,attendanceWorkSummary.getOpenId());
                 return false;
             }
         }else{
             message=(String.format("*****************at %s writeSummary fail,%s*****************",summaryDate,result.get("message")));
             log.info(message);
             attendanceWorkSummary.setMessage(message);
-            weiXinService.sendMessageWX(message);
+            weiXinService.sendMessageWX(message,attendanceWorkSummary.getOpenId());
             return false;
         }
     }
 
     @Override
-    public Boolean hasWriteSummary(Date date, Long summaryPersonId,String token) {
+    public Boolean hasWriteSummary(Date date, UserInfo userInfo) {
         String summaryDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
         String message="";
+        Long summaryPersonId=userInfo.getAccountId();
         HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
-        httpParamers.addHeader("tk",token);
+        httpParamers.addHeader("tk",userInfo.getTk());
         httpParamers.addParam("summaryPersonId",summaryPersonId.toString());
         httpParamers.addParam("date",summaryDate);
         Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/attendance/attendanceWorkSummary/detailSummary", httpParamers);
@@ -90,18 +93,18 @@ public class AttendanceSummaryServiceImpl implements AttendanceSummaryService {
             if(noDefaultSummary||noWriteSummary){
                 message=(String.format("*****************%s at %s judgeHasWriteSummary success,result=false*****************",summaryPersonId,summaryDate));
                 log.info(message);
-                weiXinService.sendMessageWX(message);
+                weiXinService.sendMessageWX(message,userInfo.getOpenId());
                 return false;
             }else{
                 message=(String.format("*****************%s at %s judgeHasWriteSummary success,result=true*****************",summaryPersonId,summaryDate));
                 log.info(message);
-                weiXinService.sendMessageWX(message);
+                weiXinService.sendMessageWX(message,userInfo.getOpenId());
                 return true;
             }
         }else{
             message=(String.format("*****************%s at %s judgeHasWriteSummary fail,%s*****************",summaryPersonId,summaryDate,result.get("message")));
             log.info(message);
-            weiXinService.sendMessageWX(message);
+            weiXinService.sendMessageWX(message,userInfo.getOpenId());
             return false;
         }
     }

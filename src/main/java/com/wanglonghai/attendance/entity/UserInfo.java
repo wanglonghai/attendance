@@ -13,4 +13,7 @@ import lombok.Data;
 public class UserInfo {
     private Long accountId;
     private String name;
+    private String pwd;
+    private String tk;
+    private String openId;
 }

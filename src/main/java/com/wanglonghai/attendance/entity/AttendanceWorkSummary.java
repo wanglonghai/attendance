@@ -16,4 +16,5 @@ public class AttendanceWorkSummary {
 	private String summaryToday;
 	private String token;
 	private String message;
+	private String openId;
 }

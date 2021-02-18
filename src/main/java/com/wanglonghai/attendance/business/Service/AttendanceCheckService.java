@@ -2,6 +2,8 @@ package com.wanglonghai.attendance.business.Service;
 
 import com.wanglonghai.attendance.entity.UserInfo;
 
+import java.util.List;
+
 /**
  * @ClassName AttendanceCheckService
  * @Author Gavin
@@ -10,7 +12,8 @@ import com.wanglonghai.attendance.entity.UserInfo;
  * @Version 1.0
  */
 public interface AttendanceCheckService {
-    Boolean dk(String token);
-    Boolean getQrCode(String tk);
+    Boolean dk(UserInfo userInfo);
+    Boolean getQrCode(UserInfo userInfo);
     String login(UserInfo userInfo);
+    void loginAll(List<UserInfo> userInfos);
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,18 +29,18 @@ import java.util.Map;
 @Service
 @Slf4j
 public class AttendanceCheckServiceImpl implements AttendanceCheckService {
-    @Value("${attendance.userName}")
-    public String userName;
-    @Value("${attendance.passWord}")
-    public String passWord;
+//    @Value("${attendance.userName}")
+//    public String userName;
+//    @Value("${attendance.passWord}")
+//    public String passWord;
     @Value("${attendance.serviceUrl}")
     public String serviceUrl;
     @Autowired
     WeiXinService weiXinService;
     @Override
-    public Boolean dk(String token) {
+    public Boolean dk(UserInfo userInfo) {
         HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
-        httpParamers.addHeader("tk",token);
+        httpParamers.addHeader("tk",userInfo.getTk());
         httpParamers.addParam("latitude","111");
         httpParamers.addParam("longitude","111");
         httpParamers.addParam("clientType","0");
@@ -50,23 +51,23 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
             date.setTime(Long.parseLong(result.get("data").toString()));//java里面应该是按毫秒
-            weiXinService.sendMessageWX("attendance success!"+ sdf.format(date));
+            weiXinService.sendMessageWX("attendance success!"+ sdf.format(date),userInfo.getOpenId());
             return true;
         }else if(result.get("code")!=null&&"-30000".equalsIgnoreCase(result.get("code").toString())){
             log.warn(result.get("message").toString());
-            weiXinService.sendMessageWX("attendance fail!"+ result.get("message").toString());
+            weiXinService.sendMessageWX("attendance fail!"+ result.get("message").toString(),userInfo.getOpenId());
             return true;
         }else{
-            errorInfo(result);
+            errorInfo(result,userInfo);
             log.info("*****************attendance fail*****************");
             return false;
         }
     }
 
     @Override
-    public Boolean getQrCode(String token) {
+    public Boolean getQrCode(UserInfo userInfo) {
         HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
-        httpParamers.addHeader("tk",token);
+        httpParamers.addHeader("tk",userInfo.getTk());
         httpParamers.addParam("isShow","true");
         Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/attendance/apply/checking/qrcode", httpParamers);
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
@@ -74,47 +75,56 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
             log.info("*****************qrCode success*****************");
             return true;
         }else{
-            errorInfo(result);
+            errorInfo(result,userInfo);
             log.info("*****************qrCode fail*****************");
-            weiXinService.sendMessageWX("qrCode fail!"+ result.get("message").toString());
+            if(!StringUtils.isBlank(userInfo.getOpenId())){
+                weiXinService.sendMessageWX("qrCode fail!"+ result.get("message").toString(),userInfo.getOpenId());
+            }
             return false;
         }
     }
-
+    @Override
+    public void loginAll(List<UserInfo> userInfos){
+        userInfos.forEach(userInfo -> {
+            login(userInfo);
+        });
+    }
     @Override
     public String login(UserInfo userInfo){
-        if(StringUtils.isBlank(userName)||StringUtils.isBlank(passWord)||StringUtils.isBlank(serviceUrl)){
+        if(userInfo==null
+                ||StringUtils.isBlank(userInfo.getName())
+                ||StringUtils.isBlank(userInfo.getPwd())
+                ||StringUtils.isBlank(serviceUrl)){
             log.error("!!!!!!!!!!!!!!!!!!!!config error!!!!!!!!!!!!!!!!!!!!");
+            return "";
         }
         HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
-        httpParamers.addParam("userName",userName);
-        httpParamers.addParam("passWord",passWord);
+        httpParamers.addParam("userName",userInfo.getName());
+        httpParamers.addParam("passWord",userInfo.getPwd());
         httpParamers.addParam("sessionId","dd");
         httpParamers.addParam("clientId","1");
         httpParamers.setJsonParamer();
         Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/loginManager/pcLogin", httpParamers);
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
             JSONObject jsonObject=(JSONObject)result.get("data");
-            if(userInfo!=null){
-                userInfo.setAccountId(Long.valueOf(jsonObject.get("accountId").toString()));
-                userInfo.setName(jsonObject.get("userName").toString());
-            }
-            //log.info(jsonObject.get("userName").toString()+"登录成功");
+            userInfo.setAccountId(Long.valueOf(jsonObject.get("accountId").toString()));
             log.info(jsonObject.get("userName").toString()+" login success...");
+
             jsonObject=(JSONObject)jsonObject.get("token");
             String token=jsonObject.getString("token");
+            userInfo.setTk(token);
             log.info(token);
             return token;
         }else{
-            errorInfo(result);
+            errorInfo(result,userInfo);
             log.info("*****************login fail*****************");
         }
         return null;
     }
-    private void errorInfo(Map<String, Object> result) {
+    private void errorInfo(Map<String, Object> result,UserInfo userInfo) {
         String code=result.get("code")==null?"":result.get("code").toString();
         String message=result.get("message")==null?"":result.get("message").toString();
-        weiXinService.sendMessageWX("fail!"+ message);
+        weiXinService.sendMessageWX("fail!"+ message,userInfo.getOpenId());
         log.error("###code:"+code);
         log.error("###message:"+message);
     }

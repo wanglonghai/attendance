@@ -8,7 +8,6 @@ package com.wanglonghai.attendance.business.Service;
  * @Version 1.0
  */
 public interface WeiXinService {
-    boolean sendMessageWX(String message);
-    boolean sendMessageWX(String message,String toUrl);
-
+    boolean sendMessageWX(String message,String toUrl,String openId);
+    boolean sendMessageWX(String message,String openId);
 }

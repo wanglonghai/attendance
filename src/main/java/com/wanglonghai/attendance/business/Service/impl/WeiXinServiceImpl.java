@@ -64,17 +64,7 @@ public class WeiXinServiceImpl implements WeiXinService {
         }
         return ymlConfig.getMessageUrl();
     }
-    @Override
-    public boolean sendMessageWX(String message) {
-        String info=String.format(template,ymlConfig.getOpenId(),ymlConfig.getTemplateId(),"","1",
-                "2","3",message,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        return send(info);
-    }
     private boolean send(String info){
-        if(StringUtils.isBlank(ymlConfig.getOpenId())){
-            log.error("openId not config,send message cancel***********");
-            return false;
-        }
         HttpParamers httpParamers = new HttpParamers(HttpMethod.POST);
         httpParamers.addParam("temaplateMessageJSON",info);
         String httpUrl = ymlConfig.getWeChatServiceUrl() + "/wx/message/" + ymlConfig.getWeChatFlag() + "/sendTemplate2";
@@ -97,9 +87,16 @@ public class WeiXinServiceImpl implements WeiXinService {
     }
 
     @Override
-    public boolean sendMessageWX(String message, String toUrl) {
-        String info=String.format(template,ymlConfig.getOpenId(),ymlConfig.getTemplateId(),getUrl()+toUrl,"0",
+    public boolean sendMessageWX(String message, String toUrl,String openId) {
+        String info=String.format(template,openId,ymlConfig.getTemplateId(),getUrl()+toUrl,"0",
                 "0",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),message,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         return send(info);
     }
+    @Override
+    public boolean sendMessageWX(String message,String openId){
+        String info=String.format(template,openId,ymlConfig.getTemplateId(),"","1",
+                "2","3",message,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        return send(info);
+    }
+
 }
