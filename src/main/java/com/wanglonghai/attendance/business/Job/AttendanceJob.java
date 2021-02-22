@@ -52,11 +52,33 @@ public class AttendanceJob {
         doAttendanceRange(TimeEnum.Afternoon);
     }
 
-    @Scheduled(cron = "1 1 7,8,11,18,19 * * ?")
+    @Scheduled(cron = "0 0 18 * * ?")
     public void testAlive() {
-        weiXinService.sendMessageWX("I am alive from scheduled!",userList.getList().get(0).getOpenId());
+        String info=String.format("good evening,I am alive  from scheduled!attendance time will be `20:%s：%s`", toolRandom.getMinute(TimeEnum.Afternoon), toolRandom.getSecond(TimeEnum.Afternoon));
+        userList.getList().forEach(userInfo -> {
+            if(StringUtils.isNotBlank(userInfo.getOpenId())){
+                weiXinService.sendMessageWX(info,userInfo.getOpenId());
+            }
+        });
     }
-
+    @Scheduled(cron = "0 0 7,8 * * ?")
+    public void testAlive2() {
+        String info=String.format("good morning,I am alive  from scheduled!attendance time will be `08:%s：%s`", toolRandom.getMinute(TimeEnum.Morning), toolRandom.getSecond(TimeEnum.Morning));
+        userList.getList().forEach(userInfo -> {
+            if(StringUtils.isNotBlank(userInfo.getOpenId())){
+                weiXinService.sendMessageWX(info,userInfo.getOpenId());
+            }
+        });
+    }
+    @Scheduled(cron = "0 0 11,12 * * ?")
+    public void testAlive3() {
+        String info=String.format("good noon,I am alive  from scheduled!attendance time will be `12:%s：%s`", toolRandom.getMinute(TimeEnum.Noon), toolRandom.getSecond(TimeEnum.Noon));
+        userList.getList().forEach(userInfo -> {
+            if(StringUtils.isNotBlank(userInfo.getOpenId())){
+                weiXinService.sendMessageWX(info,userInfo.getOpenId());
+            }
+        });
+    }
 //    @Scheduled(cron = "1 41 11 * * ?")
 //    public void doTest() {
 //        doAttendance("testTip", "testTime");

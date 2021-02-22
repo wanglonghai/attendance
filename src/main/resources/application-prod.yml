@@ -10,7 +10,7 @@ attendance:
     noon: ${attendance.scheduled.seconds} ${attendance.scheduled.noonMinute} 12 * * ?
     afternoon: ${attendance.scheduled.seconds} ${attendance.scheduled.afternoonMinute} 20 * * ?
     seconds: 1,3,7,16,19,20,28,33,41,49,50,58
-    morningMinute: 1-20
+    morningMinute: 1-25
     noonMinute: 1-10
     afternoonMinute: 1-59
 wechat:
