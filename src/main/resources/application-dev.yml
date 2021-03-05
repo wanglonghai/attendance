@@ -3,16 +3,16 @@ users:
     - {name: 13559489067,pwd: C4CA4238A0B923820DCC509A6F75849B,openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4}
     - {name: xxx,pwd: xxx,openId: }
 attendance:
-  serviceUrl: http://localhost:8086
+  serviceUrl: http://110.86.29.109:8082
   summary:
-    scheduled: 1 52 10 * * ?
+    scheduled:  1 13 23 * * ?
   scheduled:
     morning: ${attendance.scheduled.seconds} ${attendance.scheduled.morningMinute} 11 * * ? #八点10分到29分，指定秒
     noon: ${attendance.scheduled.seconds} ${attendance.scheduled.noonMinute} 12 * * ?
     afternoon: ${attendance.scheduled.seconds} ${attendance.scheduled.afternoonMinute} 20 * * ?
     seconds: 1,3,7,16,19,20,28,33,41,49,50,58
-    morningMinute: 48-50
-    noonMinute: 1-5
+    morningMinute: 1-25
+    noonMinute: 1-10
     afternoonMinute: 1-59
 wechat:
   templateId: 3TfikE2jG-n1qy3dVVAkuVusFaT-Dnt_PrFTO1ZDGyM

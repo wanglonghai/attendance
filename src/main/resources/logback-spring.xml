@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
+    <property name="LOG_PATTERN"
+              value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+
+    <!-- 格式化输出：%d表示日期，LOG_LEVEL_PATTERN:-%5p表示日志级别,${PID：-}父进程，%thread表示线程名,[%-40.40logger{39}:%line]位置信息，类名+行数， %msg：日志消息，%n是换行符-->
+    <property name="ACCESS_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} [%X{traceId}] ${PID:- } [%thread] [%-40.40logger{39}:%line] %m%n " />
+
+    <!-- 系统日志输出 -->
+    <property name="INFO_FILE_PATH" value="./logsAttendance/%d{yyyy-MM-dd}/info.%d{yyyy-MM-dd,aux}.%i.log" />
+    <!-- 错误日志输出 -->
+    <property name="ERROR_FILE_PATH" value="./logsAttendance/%d{yyyy-MM-dd}/error.%d{yyyy-MM-dd,aux}.%i.log" />
+    <!-- 访问日志输出 -->
+    <property name="ACCESS_FILE_PATH" value="./logsAttendance/%d{yyyy-MM-dd}/access.%d{yyyy-MM-dd,aux}.%i.log" />
+    <!-- MQ日志输出 -->
+    <property name="MQ_FILE_PATH" value="./logsAttendance/%d{yyyy-MM-dd}/mqBuilding.%d{yyyy-MM-dd,aux}.%i.log" />
+    <!--每天生成一个日志文件，保存3天的日志文件。rollingFile是用来切分文件的 -->
+    <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${INFO_FILE_PATH}</fileNamePattern>
+            <!-- keep 3 days' worth of history -->
+            <maxHistory>3</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 日志文件的最大大小 -->
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误日志输出  -->
+    <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ERROR_FILE_PATH}</fileNamePattern>
+            <!-- 日志最大的历史 3天 -->
+            <maxHistory>3</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 日志文件的最大大小 -->
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <!-- 访问日志输出  -->
+    <appender name="file_access" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ACCESS_FILE_PATH}</fileNamePattern>
+            <!-- 日志最大的历史 3天 -->
+            <maxHistory>3</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 日志文件的最大大小 -->
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+    <!-- mq日志输出  -->
+    <appender name="file_mq" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${MQ_FILE_PATH}</fileNamePattern>
+            <!-- 日志最大的历史 3天 -->
+            <maxHistory>3</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 日志文件的最大大小 -->
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+    <!-- 控制台输出日志 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 按照上面配置的LOG_PATTERN来打印日志 -->
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!-- 配置mq路径访问日志输出  -->
+    <logger name="com.xjf.common.logs.MQLogger" level="info" additivity="false">
+        <appender-ref ref="file_mq"/>
+        <!--mq增加控制台输出-->
+        <appender-ref ref="console"/>
+    </logger>
+    <!-- project default level -->
+    <logger name="com.xjf" level="INFO" />
+    <!--myibatis log configure-->
+    <logger name="com.xjf.dao" level="DEBUG" />
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="console" />
+        <appender-ref ref="file_info" />
+        <appender-ref ref="file_error" />
+    </root>
+
+</configuration>
