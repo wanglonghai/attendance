@@ -41,9 +41,9 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     public Boolean dk(UserInfo userInfo) {
         HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
         httpParamers.addHeader("tk",userInfo.getTk());
-        httpParamers.addParam("latitude","111");
-        httpParamers.addParam("longitude","111");
-        httpParamers.addParam("clientType","0");
+        //httpParamers.addParam("latitude","111");
+        //httpParamers.addParam("longitude","111");
+        httpParamers.addParam("clientType","1");
         Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/attendance/apply/checkIn", httpParamers);
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
             //JSONObject jsonObject=(JSONObject)result.get("data");
