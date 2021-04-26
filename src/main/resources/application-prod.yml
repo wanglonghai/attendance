@@ -15,7 +15,7 @@ attendance:
     afternoonMinute: 1-59
 wechat:
   templateId: TKvg5RroCqnF8l5mZ-qlMEO0LVA9g3Oka1a5FATWywg
-  serviceUrl: https://wx.lsxjy.com.cn
+  serviceUrl: https://wx.yongxinjia.com
   flag: xjwflag
   weAppFlag: XjwUniApp
   appid: micro_lsxjy
