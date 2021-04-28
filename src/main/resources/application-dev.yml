@@ -3,7 +3,7 @@ users:
     - {name: 13559489067,pwd: C4CA4238A0B923820DCC509A6F75849B,openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4}
     - {name: xxx,pwd: xxx,openId: }
 attendance:
-  serviceUrl: http://110.86.29.109:8082
+  serviceUrl: http://localhost:8086
   summary:
     scheduled:  1 13 23 * * ?
   scheduled:
