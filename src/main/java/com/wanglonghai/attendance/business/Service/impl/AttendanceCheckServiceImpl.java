@@ -124,6 +124,9 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     private void errorInfo(Map<String, Object> result,UserInfo userInfo) {
         String code=result.get("code")==null?"":result.get("code").toString();
         String message=result.get("message")==null?"":result.get("message").toString();
+        if(StringUtils.isBlank(message)){
+            message="可能网络不通";
+        }
         weiXinService.sendMessageWX("fail!"+ message,userInfo.getOpenId());
         log.error("###code:"+code);
         log.error("###message:"+message);
