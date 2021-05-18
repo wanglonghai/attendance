@@ -1,6 +1,6 @@
 users:
   list:
-    - {name: 13559489067,pwd: a3672d1a3ee5ffc11a1ead9d4953acc1,openId: odvHvjjoC-BhhCsBqK4WxgwfPTVY}
+    - {name: 13559489067,pwd: a3672d1a3ee5ffc11a1ead9d4953acc1,openId: oLo0Q5zFF6SRzevmEwVkF18jDH74}
 attendance:
   serviceUrl: http://nsysapi.yongxinjia.com
   summary:

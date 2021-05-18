@@ -61,7 +61,7 @@ public class AttendanceJob {
             }
         });
     }
-    @Scheduled(cron = "0 0 7,8 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     public void testAlive2() {
         String info=String.format("good morning,I am alive  from scheduled!attendance time will be `08:%s：%s`", toolRandom.getMinute(TimeEnum.Morning), toolRandom.getSecond(TimeEnum.Morning));
         userList.getList().forEach(userInfo -> {
@@ -70,7 +70,7 @@ public class AttendanceJob {
             }
         });
     }
-    @Scheduled(cron = "0 0 11,12 * * ?")
+    @Scheduled(cron = "0 0 12 * * ?")
     public void testAlive3() {
         String info=String.format("good noon,I am alive  from scheduled!attendance time will be `12:%s：%s`", toolRandom.getMinute(TimeEnum.Noon), toolRandom.getSecond(TimeEnum.Noon));
         userList.getList().forEach(userInfo -> {
