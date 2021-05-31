@@ -37,7 +37,8 @@ public class AttendanceController {
     @GetMapping(value ="/testAlive")
     public String testAlive(){
         weiXinService.sendMessageWX("I am alive from controller!",userList.getList().get(0).getOpenId());
-        return "I am alive from controller!";
+        String res=attendanceCheckService.mainTainToken(userList.getList().get(0).getTk());
+        return "I am alive from controller!，"+res;
     }
     @GetMapping(value ="/doAttendance")
     public String doAttendance(String timeTip){

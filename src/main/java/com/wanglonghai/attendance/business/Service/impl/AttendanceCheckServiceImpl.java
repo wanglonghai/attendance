@@ -1,5 +1,6 @@
 package com.wanglonghai.attendance.business.Service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wanglonghai.attendance.business.Service.AttendanceCheckService;
 import com.wanglonghai.attendance.business.Service.WeiXinService;
@@ -103,6 +104,8 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         httpParamers.addParam("passWord",userInfo.getPwd());
         httpParamers.addParam("sessionId","dd");
         httpParamers.addParam("clientId","1");
+        /**
+         * 账户密码登录会被禁言。换方案。定时请求接口，保持token永久不过期
         httpParamers.setJsonParamer();
         Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/loginManager/pcLogin", httpParamers);
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
@@ -119,9 +122,31 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
             errorInfo(result,userInfo);
             log.info("*****************login fail*****************");
         }
+         **/
         return null;
     }
+    @Override
+    public String mainTainToken(String tk){
+        if(StringUtils.isBlank(tk)){
+            log.warn("tk未配置");
+            return "tk未配置";
+        }
+        HttpParamers httpParamers=new HttpParamers(HttpMethod.GET);
+        httpParamers.addParam("limit","1");
+        httpParamers.addParam("page","1");
+        httpParamers.addHeader("tk",tk);
+        Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/noticeManage/index/news", httpParamers);
+        String res="未连接网络";
+        if(result!=null){
+             res=JSONObject.toJSONString(result);
+        }
+        log.info(res);
+        return res;
+    }
     private void errorInfo(Map<String, Object> result,UserInfo userInfo) {
+        if(result!=null){
+            log.error(JSONObject.toJSONString(result));
+        }
         String code=result.get("code")==null?"":result.get("code").toString();
         String message=result.get("message")==null?"":result.get("message").toString();
         if(StringUtils.isBlank(message)){

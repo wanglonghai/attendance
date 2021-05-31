@@ -16,4 +16,5 @@ public interface AttendanceCheckService {
     Boolean getQrCode(UserInfo userInfo);
     String login(UserInfo userInfo);
     void loginAll(List<UserInfo> userInfos);
+    String mainTainToken(String tk);
 }

@@ -65,7 +65,9 @@ public class WeiXinServiceImpl implements WeiXinService {
         return ymlConfig.getMessageUrl();
     }
     private boolean send(String info){
-        HttpParamers httpParamers = new HttpParamers(HttpMethod.POST);
+        log.info("--》》假装发送了通知消息："+info);
+        //不能发送，用户受限,可能是违规后接口被封禁
+       /* HttpParamers httpParamers = new HttpParamers(HttpMethod.POST);
         httpParamers.addParam("temaplateMessageJSON",info);
         String httpUrl = ymlConfig.getWeChatServiceUrl() + "/wx/message/" + ymlConfig.getWeChatFlag() + "/sendTemplate2";
         Map<String, Object> responseData = HttpUtils.doWeChatRequest(httpUrl, httpParamers,
@@ -83,7 +85,8 @@ public class WeiXinServiceImpl implements WeiXinService {
             log.error("发送离线消息失败,请联系管理员");
             log.error("send message fail,please contact adminstrator");
             return false;
-        }
+        }*/
+       return false;
     }
 
     @Override
