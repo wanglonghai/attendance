@@ -1,6 +1,6 @@
 users:
   list:
-    - {name: 13559489067,pwd: C4CA4238A0B923820DCC509A6F75849B,openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4,tk: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJMT0dJTl9VU0VSX0tFWSI6InBjOWE1MGJkY2MxODQ4NDM4NjkwZDI0NDFmNGQ1NjZmNzAifQ.Nkq0G_dOkXwH5B5oyho_btKAqjr_wEhPCGwxhGZmGFY}
+    - {name: 13559489067,pwd: C4CA4238A0B923820DCC509A6F75849B,openId: okMOL1aH0-WDPpaLMYgMd59HQ5L4,accountId: 44430}
     - {name: xxx,pwd: xxx,openId: }
 attendance:
   serviceUrl: http://localhost:8086

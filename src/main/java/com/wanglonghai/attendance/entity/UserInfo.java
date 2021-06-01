@@ -16,4 +16,5 @@ public class UserInfo {
     private String pwd;
     private String tk;
     private String openId;
+    private String qrCode;
 }

@@ -1,6 +1,5 @@
 package com.wanglonghai.attendance.business.Service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wanglonghai.attendance.business.Service.AttendanceCheckService;
 import com.wanglonghai.attendance.business.Service.WeiXinService;
@@ -8,8 +7,8 @@ import com.wanglonghai.attendance.common.html.HttpMethod;
 import com.wanglonghai.attendance.common.html.HttpParamers;
 import com.wanglonghai.attendance.common.html.HttpUtils;
 import com.wanglonghai.attendance.entity.UserInfo;
+import com.wanglonghai.attendance.entity.dto.UserList;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +37,8 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     public String serviceUrl;
     @Autowired
     WeiXinService weiXinService;
+    @Autowired
+    UserList userList;
     @Override
     public Boolean dk(UserInfo userInfo) {
         HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
@@ -91,6 +92,35 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         });
     }
     @Override
+    public String getQrLoginCodeUrl(){
+        String  qrUrl="二维码地址，qrcode url";
+        HttpParamers httpParamers=new HttpParamers(HttpMethod.POST);
+        httpParamers.addParam("p","p");
+        Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/loginManager/getQrCodeUrl", httpParamers);
+        if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
+             qrUrl=(String)result.get("data");
+        }else{
+            log.error("获取二维码失败");
+        }
+        log.info("：：：：：："+qrUrl);
+        return qrUrl;
+    }
+    @Override
+    public Boolean doQrCodeLogin(String qrCode){
+        HttpParamers httpParamers=new HttpParamers(HttpMethod.GET);
+        httpParamers.addParam("qrCode",qrCode);
+        httpParamers.addParam("openId",userList.getList().get(0).getOpenId());
+        Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/loginManager/qrCodeLogin", httpParamers);
+        if(result.get("data")!=null&&result.get("data").toString().contains("您已成功登录管理系统")){
+            log.info("执行扫码后逻辑成功："+JSONObject.toJSONString(result));
+            return true;
+        }else{
+            log.error("执行扫码后逻辑失败："+JSONObject.toJSONString(result));
+            return false;
+        }
+    }
+
+    @Override
     public String login(UserInfo userInfo){
         if(userInfo==null
                 ||StringUtils.isBlank(userInfo.getName())
@@ -103,14 +133,19 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         httpParamers.addParam("userName",userInfo.getName());
         httpParamers.addParam("passWord",userInfo.getPwd());
         httpParamers.addParam("sessionId","dd");
-        httpParamers.addParam("clientId","1");
-        /**
-         * 账户密码登录会被禁言。换方案。定时请求接口，保持token永久不过期
+        /**String qrCode=StringUtils.isBlank(userInfo.getQrCode())? getQrLoginCodeUrl():userInfo.getQrCode();
+        if(StringUtils.isBlank(qrCode)){**/
+            httpParamers.addParam("clientId","1");
+        /**}else{
+            //升级后 并且账户密码登录禁用后再放开
+            httpParamers.addParam("clientId","4");
+            httpParamers.addParam("qrCode",qrCode);
+            httpParamers.addParam("accountId",userInfo.getAccountId().toString());
+        }**/
         httpParamers.setJsonParamer();
         Map<String, Object> result= HttpUtils.doRequest(serviceUrl+"/loginManager/pcLogin", httpParamers);
         if(result.get("code")!=null&&"200".equalsIgnoreCase(result.get("code").toString())){
             JSONObject jsonObject=(JSONObject)result.get("data");
-            userInfo.setAccountId(Long.valueOf(jsonObject.get("accountId").toString()));
             log.info(jsonObject.get("userName").toString()+" login success...");
 
             jsonObject=(JSONObject)jsonObject.get("token");
@@ -122,7 +157,6 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
             errorInfo(result,userInfo);
             log.info("*****************login fail*****************");
         }
-         **/
         return null;
     }
     @Override

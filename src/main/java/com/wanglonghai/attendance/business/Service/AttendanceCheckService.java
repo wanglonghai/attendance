@@ -17,4 +17,6 @@ public interface AttendanceCheckService {
     String login(UserInfo userInfo);
     void loginAll(List<UserInfo> userInfos);
     String mainTainToken(String tk);
+    String getQrLoginCodeUrl();
+    Boolean doQrCodeLogin(String qrCode);
 }

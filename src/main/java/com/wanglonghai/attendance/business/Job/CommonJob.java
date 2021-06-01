@@ -25,8 +25,8 @@ public class CommonJob {
     /**
      *
      */
-    @Scheduled(fixedDelay = 1000*60*100)//每100分钟执行一次
+    //@Scheduled(fixedDelay = 1000*60*100)//每100分钟执行一次
     public void circleLogin() {
-        attendanceCheckService.mainTainToken(userList.getList().get(0).getTk());
+        //attendanceCheckService.mainTainToken(userList.getList().get(0).getTk());
     }
 }

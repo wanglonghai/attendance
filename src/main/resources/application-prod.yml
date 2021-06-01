@@ -1,6 +1,6 @@
 users:
   list:
-    - {name: 13559489067,pwd: 5e73fefa762139c1cb3c5f22e42f9320,openId: oLo0Q5zFF6SRzevmEwVkF18jDH74,tk: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJMT0dJTl9VU0VSX0tFWSI6InBjM2RjNWEwNzEzYmVkNGM0ZjlkNmQzNmI0ZjJjZWM4MTQifQ.RTFf1XcAhiPsRY_tlvhFQhZUHlMRqYZ_PAYRpfGorVc}
+    - {name: 13559489067,pwd: 5e73fefa762139c1cb3c5f22e42f9320,openId: oLo0Q5zFF6SRzevmEwVkF18jDH74,accountId: 44430}
 attendance:
   serviceUrl: http://nsysapi.yongxinjia.com
   summary:
